@@ -1,0 +1,172 @@
+practical no:04
+
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 9.2.0 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database bank;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use bank;
+Database changed
+mysql> CREATE TABLE customer
+    -> (
+    ->   customer_id INT NOT NULL,
+    ->   name INT NOT NULL,
+    ->   address INT NOT NULL,
+    ->   contactno INT NOT NULL,
+    ->   email_id INT NOT NULL,
+    ->   PRIMARY KEY (customer_id)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql>
+mysql> CREATE TABLE transaction
+    -> (
+    ->   transaction_id INT NOT NULL,
+    ->   transaction_type INT NOT NULL,
+    ->   transaction_date INT NOT NULL,
+    ->   transaction_time INT NOT NULL,
+    ->   PRIMARY KEY (transaction_id)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql>
+mysql> CREATE TABLE employee
+    -> (
+    ->   name INT NOT NULL,
+    ->   id INT NOT NULL,
+    ->   branch INT NOT NULL,
+    ->   transaction_id INT NOT NULL,
+    ->   customer_id INT NOT NULL,
+    ->   PRIMARY KEY (name),
+    ->   FOREIGN KEY (transaction_id) REFERENCES transaction(transaction_id),
+    ->   FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+mysql>
+mysql> CREATE TABLE account
+    -> (
+    ->   account_no INT NOT NULL,
+    ->   account_type INT NOT NULL,
+    ->   balance INT NOT NULL,
+    ->   account_id INT NOT NULL,
+    ->   customer_id INT NOT NULL,
+    ->   transaction_id INT NOT NULL,
+    ->   PRIMARY KEY (account_no),
+    ->   FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+    ->   FOREIGN KEY (transaction_id) REFERENCES transaction(transaction_id)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_bank |
++----------------+
+| account        |
+| customer       |
+| employee       |
+| transaction    |
++----------------+
+4 rows in set (0.02 sec)
+
+mysql> desc account;
++----------------+------+------+-----+---------+-------+
+| Field          | Type | Null | Key | Default | Extra |
++----------------+------+------+-----+---------+-------+
+| account_no     | int  | NO   | PRI | NULL    |       |
+| account_type   | int  | NO   |     | NULL    |       |
+| balance        | int  | NO   |     | NULL    |       |
+| account_id     | int  | NO   |     | NULL    |       |
+| customer_id    | int  | NO   | MUL | NULL    |       |
+| transaction_id | int  | NO   | MUL | NULL    |       |
++----------------+------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+mysql> desc customer;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| customer_id | int  | NO   | PRI | NULL    |       |
+| name        | int  | NO   |     | NULL    |       |
+| address     | int  | NO   |     | NULL    |       |
+| contactno   | int  | NO   |     | NULL    |       |
+| email_id    | int  | NO   |     | NULL    |       |
++-------------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc employee;
++----------------+------+------+-----+---------+-------+
+| Field          | Type | Null | Key | Default | Extra |
++----------------+------+------+-----+---------+-------+
+| name           | int  | NO   | PRI | NULL    |       |
+| id             | int  | NO   |     | NULL    |       |
+| branch         | int  | NO   |     | NULL    |       |
+| transaction_id | int  | NO   | MUL | NULL    |       |
+| customer_id    | int  | NO   | MUL | NULL    |       |
++----------------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc transaction;
++------------------+------+------+-----+---------+-------+
+| Field            | Type | Null | Key | Default | Extra |
++------------------+------+------+-----+---------+-------+
+| transaction_id   | int  | NO   | PRI | NULL    |       |
+| transaction_type | int  | NO   |     | NULL    |       |
+| transaction_date | int  | NO   |     | NULL    |       |
+| transaction_time | int  | NO   |     | NULL    |       |
++------------------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create user 'amit'@localhost identified by 'amit';
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> grant select on bank.account to 'amit'@localhost;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> create user 'manager'@localhost identified by 'manager';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> grant all privileges on bank.* to 'manager'@localhost;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> desc customer;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| customer_id | int  | NO   | PRI | NULL    |       |
+| name        | int  | NO   |     | NULL    |       |
+| address     | int  | NO   |     | NULL    |       |
+| contactno   | int  | NO   |     | NULL    |       |
+| email_id    | int  | NO   |     | NULL    |       |
++-------------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table customer add email varchar(20);
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc customer;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| customer_id | int         | NO   | PRI | NULL    |       |
+| name        | int         | NO   |     | NULL    |       |
+| address     | int         | NO   |     | NULL    |       |
+| contactno   | int         | NO   |     | NULL    |       |
+| email_id    | int         | NO   |     | NULL    |       |
+| email       | varchar(20) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql>
