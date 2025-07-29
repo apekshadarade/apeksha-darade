@@ -1,0 +1,196 @@
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 9.2.0 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| bank               |
+| information_schema |
+| mysql              |
+| new                |
+| now                |
+| performance_schema |
+| sys                |
++--------------------+
+7 rows in set (0.07 sec)
+
+mysql> use bank;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_bank |
++----------------+
+| account        |
+| customer       |
+| employee       |
+| transaction    |
++----------------+
+4 rows in set (0.02 sec)
+
+mysql> create view create_view select * from customer;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select * from customer' at line 1
+mysql> create view customer_view as select * from customer;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_bank |
++----------------+
+| account        |
+| customer       |
+| customer_view  |
+| employee       |
+| transaction    |
++----------------+
+5 rows in set (0.00 sec)
+
+mysql> desc customer;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| customer_id | int         | NO   | PRI | NULL    |       |
+| name        | varchar(10) | NO   |     | NULL    |       |
+| address     | varchar(50) | NO   |     | NULL    |       |
+| contactno   | int         | NO   |     | NULL    |       |
+| email_id    | varchar(50) | NO   |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> desc customer;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| customer_id | int         | NO   | PRI | NULL    |       |
+| name        | varchar(10) | NO   |     | NULL    |       |
+| address     | varchar(50) | NO   |     | NULL    |       |
+| contactno   | int         | NO   |     | NULL    |       |
+| email_id    | varchar(50) | NO   |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc employee;
++----------------+-------------+------+-----+----------+-------+
+| Field          | Type        | Null | Key | Default  | Extra |
++----------------+-------------+------+-----+----------+-------+
+| Name           | varchar(30) | YES  |     | NULL     |       |
+| set_id         | int         | NO   | PRI | NULL     |       |
+| branch         | varchar(50) | NO   |     | talegaon |       |
+| transaction_id | int         | NO   | MUL | NULL     |       |
+| customer_id    | int         | NO   | MUL | NULL     |       |
++----------------+-------------+------+-----+----------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc transaction;
++------------------+-------------+------+-----+---------+-------+
+| Field            | Type        | Null | Key | Default | Extra |
++------------------+-------------+------+-----+---------+-------+
+| transaction_id   | int         | NO   | PRI | NULL    |       |
+| transaction_type | varchar(10) | NO   |     | NULL    |       |
+| transaction_date | date        | NO   |     | NULL    |       |
+| transaction_time | float       | NO   |     | NULL    |       |
++------------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from customer;
++-------------+--------+-----------+-----------+--------------------+
+| customer_id | name   | address   | contactno | email_id           |
++-------------+--------+-----------+-----------+--------------------+
+|         345 | anita  | pune      |  78946789 | anita23@gmail.com  |
+|         355 | ajay   | mumbai    |   9876543 | ajay23@gmail.com   |
+|         356 | aman   | bengaluru |   9876783 | aman90@gmail.com   |
+|         358 | sunita | thane     |   7654893 | sunita23@gmail.com |
++-------------+--------+-----------+-----------+--------------------+
+4 rows in set (0.02 sec)
+
+mysql> select * from account;
++------------+--------------+---------+------------+-------------+----------------+
+| account_no | account_type | balance | account_id | customer_id | transaction_id |
++------------+--------------+---------+------------+-------------+----------------+
+|        111 | savings      |   60000 |        456 |         345 |            789 |
+|      56789 | savings      |   30000 |       5678 |         345 |            789 |
++------------+--------------+---------+------------+-------------+----------------+
+2 rows in set (0.02 sec)
+
+mysql> select c.name, a.account_no,a.balance from customer c join account on c.customerID where a.balance >=0;
+ERROR 1054 (42S22): Unknown column 'a.account_no' in 'field list'
+mysql> SELECT c.Name, a.Account_no, a.Balance FROM Customer c JOIN Account a ON c.CustomerID = a.CustomerID WHERE a.Balance >= 0;
+ERROR 1054 (42S22): Unknown column 'c.CustomerID' in 'on clause'
+mysql> SELECT c.Name, a.Account_no, a.Balance FROM Customer c JOIN Account a ON c.CustomerID = a.Customer_ID WHERE a.Balance >= 0;
+ERROR 1054 (42S22): Unknown column 'c.CustomerID' in 'on clause'
+mysql> SELECT c.Name, a.Account_no, a.Balance FROM Customer c JOIN Account a ON c.CustomerID = a.Customer_id WHERE a.Balance >= 0;
+ERROR 1054 (42S22): Unknown column 'c.CustomerID' in 'on clause'
+mysql> SELECT c.Name, a.Account_no, a.Balance FROM Customer c JOIN Account a ON c.Customer_id = a.Customer_id WHERE a.Balance >= 0;
++-------+------------+---------+
+| Name  | Account_no | Balance |
++-------+------------+---------+
+| anita |        111 |   60000 |
+| anita |      56789 |   30000 |
++-------+------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select * from customer_view;
++-------------+--------+-----------+-----------+--------------------+
+| customer_id | name   | address   | contactno | email_id           |
++-------------+--------+-----------+-----------+--------------------+
+|         345 | anita  | pune      |  78946789 | anita23@gmail.com  |
+|         355 | ajay   | mumbai    |   9876543 | ajay23@gmail.com   |
+|         356 | aman   | bengaluru |   9876783 | aman90@gmail.com   |
+|         358 | sunita | thane     |   7654893 | sunita23@gmail.com |
++-------------+--------+-----------+-----------+--------------------+
+4 rows in set (0.00 sec)
+
+mysql> create index index1 on transaction(transaction_date);
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show indexes from transaction;
++-------------+------------+----------+--------------+------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table       | Non_unique | Key_name | Seq_in_index | Column_name      | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++-------------+------------+----------+--------------+------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| transaction |          0 | PRIMARY  |            1 | transaction_id   | A         |           0 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+| transaction |          1 | index1   |            1 | transaction_date | A         |           0 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
++-------------+------------+----------+--------------+------------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+2 rows in set (0.01 sec)
+
+mysql> select name from customer where name like 'd%';
+Empty set (0.00 sec)
+
+mysql>  select Name from customer where Name like 'S%';
++--------+
+| Name   |
++--------+
+| sunita |
++--------+
+1 row in set (0.00 sec)
+
+mysql>  select Name from customer where Name like 'a%';
++-------+
+| Name  |
++-------+
+| anita |
+| ajay  |
+| aman  |
++-------+
+3 rows in set (0.00 sec)
+
+mysql> select Balance from account where Balance between 400 and 100000;
++---------+
+| Balance |
++---------+
+|   60000 |
+|   30000 |
++---------+
+2 rows in set (0.00 sec)
+
+mysql>
