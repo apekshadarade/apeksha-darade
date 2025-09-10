@@ -1,0 +1,111 @@
+
+SQL*Plus: Release 21.0.0.0.0 - Production on Wed Sep 10 11:31:34 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Wed Sep 10 2025 08:10:22 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> create table product(pid number(10), pname varchar2(20),price number (10,2);
+create table product(pid number(10), pname varchar2(20),price number (10,2)
+                                                                          *
+ERROR at line 1:
+ORA-00907: missing right parenthesis
+
+
+SQL> create table product(pid number(10), pname varchar2(20),price number (10,2));
+
+Table created.
+
+SQL> commit
+  2  ;
+
+Commit complete.
+
+SQL> insert into product (pid,pname,price) values (100,'smart-tv',18000);
+
+1 row created.
+
+SQL> insert into product (pid,pname,price) values (101,'smart-watch',1800);
+
+1 row created.
+
+ QL> insert into product (pid,pname,price) values (101,'apple watch',45000);
+
+1 row created.
+
+SQL> select * from product
+  2  ;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+       100 smart-tv                  18000
+       101 smart-watch                1800
+       101 apple watch               45000
+
+SQL> update product set pid = 102 where pname = 'apple watch';
+
+1 row updated.
+
+SQL> select * from product;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+       100 smart-tv                  18000
+       101 smart-watch                1800
+       102 apple watch               45000
+
+SQL> @C:\Users\apekh\Desktop\abc.sql\cursor\implicit.sql
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\apekh\Desktop\abc.sql\cursor\Explicit.sql
+ID: 100, Name: smart-tv, Price: 18000
+ID: 101, Name: smart-watch, Price: 1800
+ID: 102, Name: apple watch, Price: 45000
+ID: 103, Name: tablet, Price: 18000
+
+SQL> select * from product;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+       100 smart-tv                  18000
+       101 smart-watch                1800
+       102 apple watch               45000
+       103 tablet                    18000
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\apekh\Desktop\abc.sql\cursor\parameterized.sql
+ID: 100, Name: smart-tv, Price: 18000
+ID: 102, Name: apple watch, Price: 45000
+ID: 103, Name: tablet, Price: 18000
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\apekh\Desktop\abc.sql\cursor\update.sql
+Prices updated.
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from product;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+       100 smart-tv                  18000
+       101 smart-watch                1980
+       102 apple watch               45000
+       103 tablet                    18000
+
+SQL> commit
+  2  ;
+
+Commit complete.
+
+SQL>
