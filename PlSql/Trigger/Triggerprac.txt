@@ -1,0 +1,129 @@
+SQL*Plus: Release 21.0.0.0.0 - Production on Wed Sep 10 14:32:50 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Wed Sep 10 2025 11:31:40 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> create table clientmaster(srno int,name varchar(20));
+
+Table created.
+
+SQL> create table audit as select * from clientmaster;
+create table audit as select * from clientmaster
+             *
+ERROR at line 1:
+ORA-00903: invalid table name
+
+
+SQL> create table audi as select * from clientmaster;
+
+Table created.
+
+SQL> desc audi;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SRNO                                               NUMBER(38)
+ NAME                                               VARCHAR2(20)
+
+SQL> desc clientmaster;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SRNO                                               NUMBER(38)
+ NAME                                               VARCHAR2(20)
+
+SQL> insert into clientmaster values(111,'apeksha');
+
+1 row created.
+
+SQL> insert into clientmaster values(112,'archana');
+
+1 row created.
+
+SQL> @ C:\Users\apekh\Desktop\trigger1.sql
+
+Trigger created.
+
+SQL> update clientmaster set name='rupa' where srno=111;
+
+1 row updated.
+
+SQL> select * from audi;
+
+      SRNO NAME
+---------- --------------------
+       111 apeksha
+
+SQL> select * from clientmaster;
+
+      SRNO NAME
+---------- --------------------
+       111 rupa
+       112 archana
+
+SQL> select * from audi;
+
+      SRNO NAME
+---------- --------------------
+       111 apeksha
+
+SQL> delete from clientmaster;
+
+2 rows deleted.
+
+SQL> select * from audi;
+
+      SRNO NAME
+---------- --------------------
+       111 apeksha
+       111 rupa
+       112 archana
+
+SQL> insert into clientmaster values(113,'mohini');
+
+1 row created.
+
+SQL> select * from clientmaster;
+
+      SRNO NAME
+---------- --------------------
+       113 mohini
+
+
+SQL> delete from audi where srno=111;
+
+2 rows deleted.
+
+SQL> select * from clientmaster;
+
+      SRNO NAME
+---------- --------------------
+       113 mohini
+
+SQL> @ C:\Users\apekh\Desktop\trigger2.sql
+
+Trigger created.
+
+SQL> select * from audi;
+
+      SRNO NAME
+---------- --------------------
+       101 vinod
+
+SQL> delete from audi where srno=101;
+delete from audi where srno=101
+            *
+ERROR at line 1:
+ORA-21000: error number argument to raise_application_error of -200011 is out
+of range
+ORA-06512: at "SYSTEM.XYZ4", line 3
+ORA-04088: error during execution of trigger 'SYSTEM.XYZ4'
+
+
+SQL>
