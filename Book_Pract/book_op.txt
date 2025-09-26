@@ -1,0 +1,89 @@
+SQL*Plus: Release 21.0.0.0.0 - Production on Fri Sep 26 10:32:47 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Fri Sep 26 2025 09:39:10 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+
+SQL> CREATE TABLE borrower8 (Roll_no NUMBER(3) PRIMARY KEY, Name VARCHAR2(50), Date_of_Issue DATE, NameOfBook VARCHAR2(100), Status CHAR(1) CHECK (Status IN ('I','R')));
+
+Table created.
+
+SQL> CREATE TABLE fine8 (Roll_no NUMBER(3), FineDate DATE, Amt NUMBER(6,2), CONSTRAINT fk_roll FOREIGN KEY (Roll_no) REFERENCES borrower8(ROLL_NO));
+
+Table created.
+
+SQL> INSERT INTO borrower8 (Roll_no, Name, Date_of_Issue, NameOfBook, Status)  VALUES (11, 'Rakesh', TO_DATE('21-july-2025','DD-MON-YYYY'), 'maths', 'I');
+
+1 row created.
+
+SQL> INSERT INTO borrower8 (Roll_no, Name, Date_of_Issue, NameOfBook, Status)  VALUES (12, 'Anita', TO_DATE('22-march-2025','DD-MON-YYYY'), 'science', 'I');
+
+1 row created.
+
+SQL> INSERT INTO borrower8 (Roll_no, Name, Date_of_Issue, NameOfBook, Status)  VALUES (13, 'Apeksha', TO_DATE('23-aug-2025','DD-MON-YYYY'), 'Geography', 'I');
+
+1 row created.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> select * from borrower8;
+
+   ROLL_NO NAME                 DATE_OF_I NAMEOFBOOK                     S
+---------- -------------------- --------- ------------------------------ -
+        11 Rakesh               21-JUL-25 maths                          I
+        12 Anita                22-MAR-25 science                        I
+        13 Apeksha              23-AUG-25 Geography                      I
+
+SQL> set serveroutput on
+SQL> @C:\Users\apekh\Desktop\Apekshasql\Book.sql
+Enter value for r: 11
+old   9:     R := &R;
+new   9:     R := 11;
+Enter value for bn: maths
+old  10:     Bn := '&Bn';
+new  10:     Bn := 'maths';
+Fine: 3372.34
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\apekh\Desktop\Apekshasql\Book.sql
+Enter value for r: 12
+old   9:     R := &R;
+new   9:     R := 12;
+Enter value for bn: science
+old  10:     Bn := '&Bn';
+new  10:     Bn := 'science';
+Fine: 9422.35
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\apekh\Desktop\Apekshasql\Book.sql
+Enter value for r: 13
+old   9:     R := &R;
+new   9:     R := 13;
+Enter value for bn: Geography
+old  10:     Bn := '&Bn';
+new  10:     Bn := 'Geography';
+Fine: 1722.36
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from fine8;
+
+   ROLL_NO FINEDATE         AMT
+---------- --------- ----------
+        11 26-SEP-25    3372.34
+        12 26-SEP-25    9422.35
+        13 26-SEP-25    1722.36
+
+SQL>
