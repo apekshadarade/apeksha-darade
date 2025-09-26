@@ -1,0 +1,124 @@
+SQL*Plus: Release 21.0.0.0.0 - Production on Fri Sep 26 09:39:01 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Fri Sep 26 2025 01:17:16 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> create table client_master(srno int,name varchar(30));
+
+Table created.
+
+SQL> create table audit_a as select * from client_master;
+
+Table created.
+
+SQL> insert into client_master values(11,'Rani');
+
+1 row created.
+
+SQL> insert into client_master values(12,'Raja');
+
+1 row created.
+
+SQL> insert into client_master values(13,'Raj');
+
+1 row created.
+
+SQL> @C:\Users\apekh\Desktop\Apekshasql\Trigger.sql
+
+Warning: Trigger created with compilation errors.
+
+SQL> @C:\Users\apekh\Desktop\Apekshasql\Trigger.sql
+
+Trigger created.
+
+SQL> select * from client_master;
+
+      SRNO NAME
+---------- ------------------------------
+        11 Rani
+        12 Raja
+        13 Raj
+
+SQL> update client_master set name='Rahul' where srno=13;
+
+1 row updated.
+
+SQL> select * from client_master;
+
+      SRNO NAME
+---------- ------------------------------
+        11 Rani
+        12 Raja
+        13 Rahul
+
+SQL> select * from audit_a;
+
+      SRNO NAME
+---------- ------------------------------
+        13 Raj
+
+SQL> delete from client_master where srno=13;
+
+1 row deleted.
+
+SQL> select * from audit_a;
+
+      SRNO NAME
+---------- ------------------------------
+        13 Raj
+        13 Rahul
+
+SQL> commit;
+
+Commit complete.
+
+SQL> create table insertbackup as select * from client_master;
+
+Table created.
+
+SQL> @C:\Users\apekh\Desktop\Apekshasql\Insert_Backup.sql
+
+Trigger created.
+
+SQL> select * from insertbackup;
+
+      SRNO NAME
+---------- ------------------------------
+        11 Rani
+        12 Raja
+
+SQL> @C:\Users\apekh\Desktop\Apekshasql\Audit_Insert.sql
+
+Trigger created.
+
+SQL> insert into audit_a values(14,'DBMS');
+insert into audit_a values(14,'DBMS')
+            *
+ERROR at line 1:
+ORA-20001: Cannot delete or insert in September
+ORA-06512: at "SYSTEM.INSERT_AUDIT_A", line 3
+ORA-04088: error during execution of trigger 'SYSTEM.INSERT_AUDIT_A'
+
+
+SQL> @C:\Users\apekh\Desktop\Apekshasql\Audit_Update.sql
+
+Trigger created.
+
+SQL> update audit_a set name = 'Apeksha' where srno = 11;
+update audit_a set name = 'Apeksha' where srno = 11
+       *
+ERROR at line 1:
+ORA-20002: Cannot update or delete in September
+ORA-06512: at "SYSTEM.UPDATE_DELETE_AUDIT_A", line 3
+ORA-04088: error during execution of trigger 'SYSTEM.UPDATE_DELETE_AUDIT_A'
+
+
+SQL>
