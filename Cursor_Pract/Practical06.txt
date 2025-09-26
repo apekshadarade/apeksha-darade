@@ -1,0 +1,96 @@
+SQL*Plus: Release 21.0.0.0.0 - Production on Fri Sep 26 01:15:53 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Thu Sep 25 2025 20:44:43 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+
+SQL> CREATE TABLE productinfo (
+  2      product_id   NUMBER PRIMARY KEY,
+  3      product_name VARCHAR2(20),
+  4      price        NUMBER(10,2)
+  5  );
+
+Table created.
+
+SQL> insert into productinfo values (100,'laptop',100);
+
+1 row created.
+
+SQL> insert into productinfo values (101,'Mobile',11000);
+
+1 row created.
+
+SQL> insert into productinfo values (102,'EarBuds',1500);
+
+1 row created.
+
+SQL> insert into productinfo values (103,'SmartTV',20000);
+
+1 row created.
+
+SQL> select * from productinfo;
+
+PRODUCT_ID PRODUCT_NAME              PRICE
+---------- -------------------- ----------
+       100 laptop                      100
+       101 Mobile                    11000
+       102 EarBuds                    1500
+       103 SmartTV                   20000
+                                            
+
+SQL> @C:\Users\apekh\Desktop\Apekshasql\implicit.sql
+Price fetched:11000
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\apekh\Desktop\Apekshasql\explicit.sql
+Product ID: 100
+Product Name: laptop
+Price: 100
+Product ID: 101
+Product Name: Mobile
+Price: 11000
+Product ID: 102
+Product Name: EarBuds
+Price: 1500
+Product ID: 103
+Product Name: SmartTV
+Price: 20000
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\apekh\Desktop\Apekshasql\parameterized.sql
+Enter value for enter_price: 100
+old  13:   v_input := &enter_price;
+new  13:   v_input := 100;
+Starting to fetch products above price 100...
+pid: 101, name: Mobile, price: 11000
+pid: 102, name: EarBuds, price: 1500
+pid: 103, name: SmartTV, price: 20000
+Done fetching products.
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\apekh\Desktop\Apekshasql\ForLoop.sql
+Prices updated.
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from productinfo;
+
+PRODUCT_ID PRODUCT_NAME              PRICE
+---------- -------------------- ----------
+       100 laptop                      210
+       101 Mobile                    11000
+       102 EarBuds                    3150
+       103 SmartTV                   20000
+
+SQL>
